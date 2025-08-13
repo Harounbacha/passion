@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import useLocalStorage from '@/hooks/use-local-storage'
@@ -33,7 +33,7 @@ export default function DiscoverPage() {
     setIsClient(true)
   }, [])
 
-  const handleAnalyze = async () => {
+  const handleAnalyze = useCallback(async () => {
     if (journalEntries.length === 0) {
       toast({
         title: 'No Entries Found',
@@ -59,7 +59,7 @@ export default function DiscoverPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [journalEntries, toast])
 
   const handleAddToBrainstorm = (title: string, description: string) => {
     const newIdea: Idea = {
