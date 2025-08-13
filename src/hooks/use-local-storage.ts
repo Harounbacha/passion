@@ -21,20 +21,39 @@ export default function useLocalStorage<T>(key: string, initialValue: T): [T, (v
   const [storedValue, setStoredValue] = useState<T>(readValue)
 
   const setValue = useCallback((value: T | ((val: T) => T)) => {
+    if (typeof window === 'undefined') {
+      console.warn(`Tried to set localStorage key “${key}” even though no window was found`)
+      return
+    }
+
     try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value
-      setStoredValue(valueToStore)
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore))
-      }
+      const newValue = value instanceof Function ? value(storedValue) : value
+      window.localStorage.setItem(key, JSON.stringify(newValue))
+      setStoredValue(newValue)
+      window.dispatchEvent(new Event('local-storage'))
     } catch (error) {
       console.warn(`Error setting localStorage key “${key}”:`, error)
     }
-  }, [key, storedValue]);
+  }, [initialValue, key, storedValue]);
 
   useEffect(() => {
     setStoredValue(readValue())
   }, [readValue])
+  
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setStoredValue(readValue())
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    window.addEventListener('local-storage', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('local-storage', handleStorageChange)
+    }
+  }, [readValue])
+
 
   return [storedValue, setValue]
 }
