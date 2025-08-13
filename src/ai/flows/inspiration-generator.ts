@@ -4,26 +4,13 @@
  * @fileOverview Generates a dynamic list of inspirational content.
  *
  * - generateInspiration - A function that returns a list of inspirational articles.
- * - InspirationItemSchema - The schema for a single inspiration item.
- * - InspirationOutputSchema - The schema for the list of inspiration items.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'zod';
-
-export const InspirationItemSchema = z.object({
-  title: z.string().describe('The compelling title of the article or resource.'),
-  source: z.string().describe('The name of the source, like a magazine, blog, or website (e.g., "Medium", "Forge", "Psychology Today").'),
-  excerpt: z.string().describe('A short, one-sentence summary or excerpt of the content.'),
-  url: z.string().url().describe("A placeholder URL, which should always be '#'."),
-  aiHint: z.string().describe('One or two keywords for a relevant background image (e.g., "creative workspace", "zen garden").'),
-});
-
-export const InspirationOutputSchema = z.object({
-  inspirationFeed: z.array(InspirationItemSchema),
-});
-
-export type InspirationOutput = z.infer<typeof InspirationOutputSchema>;
+import {
+  InspirationOutput,
+  InspirationOutputSchema,
+} from '@/ai/schemas/inspiration-schema';
 
 export async function generateInspiration(): Promise<InspirationOutput> {
   return inspirationGeneratorFlow();
