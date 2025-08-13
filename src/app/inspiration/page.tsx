@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/card';
 import {generateInspiration} from '@/ai/flows/inspiration-generator';
 import type {InspirationOutput} from '@/ai/schemas/inspiration-schema';
-import {useEffect, useState, useCallback} from 'react';
+import {useEffect, useState} from 'react';
 import {Skeleton} from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
@@ -35,8 +35,14 @@ function InspirationSkeleton() {
 export default function InspirationPage() {
   const [data, setData] = useState<InspirationOutput | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isClient, setIsClient] = useState(false)
 
-  const fetchData = useCallback(async () => {
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  const fetchData = async () => {
+    if (typeof window === 'undefined') return; // Ensure this only runs on the client
     try {
       setIsLoading(true);
       const inspiration = await generateInspiration();
@@ -46,11 +52,13 @@ export default function InspirationPage() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if(isClient) {
+      fetchData();
+    }
+  }, [isClient]);
 
   return (
     <div className="flex flex-col gap-8">
