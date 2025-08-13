@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import Image from 'next/image';
+import Link from 'next/link';
 import {generateInspiration} from '@/ai/flows/inspiration-generator';
 import type {InspirationOutput} from '@/ai/schemas/inspiration-schema';
 import {useEffect, useState} from 'react';
@@ -72,11 +73,9 @@ export default function InspirationPage() {
           </>
         )}
         {data?.inspirationFeed.map((item, index) => (
-          <a
+          <Link
             key={index}
             href={item.url}
-            target="_blank"
-            rel="noopener noreferrer"
             className="flex"
           >
             <Card className="flex flex-col hover:border-primary/50 transition-colors w-full">
@@ -101,7 +100,7 @@ export default function InspirationPage() {
                 </p>
               </CardFooter>
             </Card>
-          </a>
+          </Link>
         ))}
       </div>
     </div>
