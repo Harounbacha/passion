@@ -22,12 +22,12 @@ const prompt = ai.definePrompt({
   output: {schema: InspirationOutputSchema},
   prompt: `You are an AI assistant that curates inspirational content for users trying to discover their passion.
 
-Generate a list of 6 fresh, unique, and inspiring articles, blog posts, or book summaries related to topics like self-discovery, finding your passion, starting side projects, creativity, and personal growth.
+Generate a list of 3 fresh, unique, and inspiring articles, blog posts, or book summaries related to topics like self-discovery, finding your passion, starting side projects, creativity, and personal growth.
 
 For each item, provide:
 - A compelling and realistic-sounding title.
 - A plausible source (e.g., a well-known blog, magazine, or book summary like "Harvard Business Review", "James Clear's Blog", "Austin Kleon").
-- An engaging excerpt that is 2-3 sentences long.
+- An engaging and detailed excerpt that is 4-5 sentences long.
 - A URL that links to the journal page with the title as a prompt. The format must be '/journal?prompt=ARTICLE_TITLE_HERE' where ARTICLE_TITLE_HERE is the URL-encoded version of the title.
 
 Do not repeat content you've generated before. Ensure the list is diverse and covers different angles of the main topic. The titles should be specific and sound like real articles you would find online.`,

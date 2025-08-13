@@ -19,9 +19,10 @@ function InspirationSkeleton() {
   return (
     <Card className="flex flex-col w-full">
       <CardHeader>
-        <Skeleton className="h-6 w-3/4" />
+        <Skeleton className="h-7 w-3/4" />
       </CardHeader>
-      <CardContent className="flex-grow space-y-2">
+      <CardContent className="flex-grow space-y-3">
+        <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-5/6" />
@@ -60,12 +61,9 @@ export default function InspirationPage() {
           Curated stories, articles, and resources to fuel your journey.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {isLoading && (
           <>
-            <InspirationSkeleton />
-            <InspirationSkeleton />
-            <InspirationSkeleton />
             <InspirationSkeleton />
             <InspirationSkeleton />
             <InspirationSkeleton />
@@ -79,13 +77,13 @@ export default function InspirationPage() {
           >
             <Card className="flex flex-col hover:border-primary/50 transition-colors w-full">
               <CardHeader>
-                <CardTitle>{item.title}</CardTitle>
+                <CardTitle className="text-xl">{item.title}</CardTitle>
               </CardHeader>
               <CardContent className="flex-grow">
-                <CardDescription>{item.excerpt}</CardDescription>
+                <CardDescription className="text-base">{item.excerpt}</CardDescription>
               </CardContent>
               <CardFooter>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Source: {item.source}
                 </p>
               </CardFooter>
