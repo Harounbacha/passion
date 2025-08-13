@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import Image from 'next/image';
-import Link from 'next/link';
 import {generateInspiration} from '@/ai/flows/inspiration-generator';
 import type {InspirationOutput} from '@/ai/schemas/inspiration-schema';
 import {useEffect, useState} from 'react';

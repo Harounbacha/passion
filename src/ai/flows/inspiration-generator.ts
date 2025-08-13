@@ -28,7 +28,7 @@ For each item, provide:
 - A compelling and realistic-sounding title.
 - A plausible source (e.g., a well-known blog, magazine, or book summary like "Harvard Business Review", "James Clear's Blog", "Austin Kleon").
 - A short, engaging excerpt (one sentence).
-- A placeholder URL of '#'.
+- A placeholder URL, which should always be 'https://example.com'.
 - An aiHint of one or two keywords for a relevant background image.
 
 Do not repeat content you've generated before. Ensure the list is diverse and covers different angles of the main topic. The titles should be specific and sound like real articles you would find online.`,
