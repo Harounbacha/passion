@@ -49,12 +49,12 @@ export function DailyPrompt() {
       </div>
       <CardFooter className="flex justify-end gap-2">
           <Button variant="ghost" size="icon" onClick={getNewPrompt} aria-label="Get new prompt">
-            <RefreshCw />
+            <RefreshCw className="h-4 w-4" />
           </Button>
           <Button asChild variant="outline">
-            <Link href="/journal">
+            <Link href={`/journal?prompt=${encodeURIComponent(prompt)}`}>
               Go to Journal
-              <ArrowRight />
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
       </CardFooter>

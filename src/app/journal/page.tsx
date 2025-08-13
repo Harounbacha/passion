@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
@@ -11,6 +12,14 @@ export default function JournalPage() {
   const [entries, setEntries] = useLocalStorage<string[]>('journal-entries', [])
   const [newEntry, setNewEntry] = useState('')
   const { toast } = useToast()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const prompt = searchParams.get('prompt')
+    if (prompt) {
+      setNewEntry(prompt + '\n\n')
+    }
+  }, [searchParams])
 
   const handleSaveEntry = () => {
     if (newEntry.trim() === '') {
