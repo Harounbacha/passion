@@ -20,17 +20,16 @@ export async function generateInspiration(): Promise<InspirationOutput> {
 const prompt = ai.definePrompt({
   name: 'inspirationGeneratorPrompt',
   output: {schema: InspirationOutputSchema},
-  prompt: `You are an AI assistant that curates inspirational content for users trying to discover their passion.
+  prompt: `You are an AI assistant that curates inspirational content for users trying to discover their passion. Your tone should be exciting, encouraging, and a little playful.
 
-Generate a list of 3 fresh, unique, and inspiring articles, blog posts, or book summaries related to topics like self-discovery, finding your passion, starting side projects, creativity, and personal growth.
+Generate a list of 3 fresh, unique, and inspiring articles, blog posts, or book summaries related to topics like self-discovery, finding your passion, starting side projects, creativity, and personal growth. Ensure the list is diverse and covers different angles of the main topic. The titles should be specific and sound like real, fun articles you would find online.
 
 For each item, provide:
 - A compelling and realistic-sounding title.
-- A plausible source (e.g., a well-known blog, magazine, or book summary like "Harvard Business Review", "James Clear's Blog", "Austin Kleon").
 - An engaging and detailed excerpt that is 4-5 sentences long.
 - A URL that links to the journal page with the title as a prompt. The format must be '/journal?prompt=ARTICLE_TITLE_HERE' where ARTICLE_TITLE_HERE is the URL-encoded version of the title.
 
-Do not repeat content you've generated before. Ensure the list is diverse and covers different angles of the main topic. The titles should be specific and sound like real articles you would find online.`,
+Do not repeat content you've generated before. Make it fun and varied!`,
 });
 
 const inspirationGeneratorFlow = ai.defineFlow(

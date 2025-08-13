@@ -10,15 +10,10 @@ import {z} from 'zod';
 
 export const InspirationItemSchema = z.object({
   title: z.string().describe('The compelling title of the article or resource.'),
-  source: z
-    .string()
-    .describe(
-      'The name of the source, like a magazine, blog, or website (e.g., "Medium", "Forge", "Psychology Today").'
-    ),
   excerpt: z
     .string()
     .describe(
-      'A short, engaging excerpt of the content, about 2-3 sentences long.'
+      'A short, engaging excerpt of the content, about 4-5 sentences long.'
     ),
   url: z
     .string()

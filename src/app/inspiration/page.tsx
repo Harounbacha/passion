@@ -29,9 +29,6 @@ function InspirationSkeleton() {
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-5/6" />
       </CardContent>
-      <CardFooter>
-        <Skeleton className="h-4 w-1/3" />
-      </CardFooter>
     </Card>
   );
 }
@@ -90,11 +87,6 @@ export default function InspirationPage() {
               <CardContent className="flex-grow">
                 <CardDescription className="text-base">{item.excerpt}</CardDescription>
               </CardContent>
-              <CardFooter>
-                <p className="text-sm text-muted-foreground">
-                  Source: {item.source}
-                </p>
-              </CardFooter>
             </Card>
           </Link>
         ))}
