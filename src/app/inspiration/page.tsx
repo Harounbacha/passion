@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -72,7 +73,7 @@ export default function InspirationPage() {
           </>
         )}
         {data?.inspirationFeed.map((item, index) => (
-          <Link
+          <a
             key={index}
             href={item.url}
             target="_blank"
@@ -101,7 +102,7 @@ export default function InspirationPage() {
                 </p>
               </CardFooter>
             </Card>
-          </Link>
+          </a>
         ))}
       </div>
     </div>
