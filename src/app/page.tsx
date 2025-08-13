@@ -4,10 +4,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DailyPrompt } from '@/components/daily-prompt'
 import useLocalStorage from '@/hooks/use-local-storage'
 import { BookText, BrainCircuit } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Dashboard() {
   const [journalEntries] = useLocalStorage<string[]>('journal-entries', [])
   const [ideas] = useLocalStorage<{ id: string; title: string; content: string }[]>('brainstorm-ideas', [])
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   return (
     <div className="flex flex-col gap-8">
@@ -27,7 +34,11 @@ export default function Dashboard() {
               <BookText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{journalEntries.length}</div>
+              {isClient ? (
+                <div className="text-2xl font-bold">{journalEntries.length}</div>
+              ) : (
+                <Skeleton className="h-8 w-12" />
+              )}
               <p className="text-xs text-muted-foreground">
                 Total thoughts and reflections captured.
               </p>
@@ -39,7 +50,11 @@ export default function Dashboard() {
               <BrainCircuit className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{ideas.length}</div>
+              {isClient ? (
+                <div className="text-2xl font-bold">{ideas.length}</div>
+               ) : (
+                <Skeleton className="h-8 w-12" />
+              )}
               <p className="text-xs text-muted-foreground">
                 Potential passions you're exploring.
               </p>
