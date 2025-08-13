@@ -5,8 +5,8 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import useLocalStorage from '@/hooks/use-local-storage'
-import { Loader2, Sparkles } from 'lucide-react'
-import { aiPassionFinder } from '@/ai/flows/ai-passion-finder'
+import { Loader2, Sparkles, PlusCircle } from 'lucide-react'
+import { aiPassionFinder, type AiPassionFinderOutput } from '@/ai/flows/ai-passion-finder'
 import { useToast } from '@/hooks/use-toast'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -15,10 +15,17 @@ type JournalEntry = {
   content: string
 }
 
+type Idea = {
+  id: string;
+  title: string;
+  content: string;
+};
+
 export default function DiscoverPage() {
   const [journalEntries] = useLocalStorage<JournalEntry[]>('journal-entries-v2', [])
+  const [ideas, setIdeas] = useLocalStorage<Idea[]>('brainstorm-ideas', []);
   const [isLoading, setIsLoading] = useState(false)
-  const [passionAreas, setPassionAreas] = useState('')
+  const [analysisResult, setAnalysisResult] = useState<AiPassionFinderOutput | null>(null)
   const { toast } = useToast()
   const [isClient, setIsClient] = useState(false)
 
@@ -37,11 +44,11 @@ export default function DiscoverPage() {
     }
 
     setIsLoading(true)
-    setPassionAreas('')
+    setAnalysisResult(null)
     try {
       const allEntries = journalEntries.map(entry => entry.content).join('\n\n---\n\n')
       const result = await aiPassionFinder({ journalEntries: allEntries })
-      setPassionAreas(result.suggestedPassionAreas)
+      setAnalysisResult(result)
     } catch (error) {
       console.error('Error analyzing passions:', error)
       toast({
@@ -53,6 +60,19 @@ export default function DiscoverPage() {
       setIsLoading(false)
     }
   }
+
+  const handleAddToBrainstorm = (title: string, description: string) => {
+    const newIdea: Idea = {
+      id: new Date().toISOString(),
+      title,
+      content: description,
+    };
+    setIdeas([newIdea, ...ideas]);
+    toast({
+      title: 'Added to Brainstorm!',
+      description: `"${title}" is now on your board.`,
+    });
+  };
 
   return (
     <div className="flex flex-col items-center text-center gap-8">
@@ -86,14 +106,24 @@ export default function DiscoverPage() {
         </CardContent>
       </Card>
 
-      {passionAreas && (
+      {analysisResult && (
         <Card className="w-full max-w-2xl text-left animate-in fade-in duration-500">
           <CardHeader>
             <CardTitle>Suggested Passion Areas</CardTitle>
-            <CardDescription>Based on your journal, here are some areas you might be passionate about:</CardDescription>
+            <CardDescription>Based on your journal, here are some areas you might be passionate about. Click one to add it to your Brainstorming Board!</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="whitespace-pre-wrap font-body">{passionAreas}</div>
+          <CardContent className="space-y-4">
+            {analysisResult.passionAreas.map((area, index) => (
+              <div key={index} className="flex items-center justify-between p-4 rounded-lg border bg-background hover:bg-muted/50 transition-colors">
+                <div>
+                  <h3 className="font-semibold">{area.title}</h3>
+                  <p className="text-sm text-muted-foreground">{area.description}</p>
+                </div>
+                <Button variant="ghost" size="icon" onClick={() => handleAddToBrainstorm(area.title, area.description)} aria-label={`Add ${area.title} to brainstorm board`}>
+                  <PlusCircle className="h-5 w-5 text-primary" />
+                </Button>
+              </div>
+            ))}
           </CardContent>
         </Card>
       )}

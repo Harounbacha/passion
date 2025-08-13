@@ -19,9 +19,16 @@ const AiPassionFinderInputSchema = z.object({
 export type AiPassionFinderInput = z.infer<typeof AiPassionFinderInputSchema>;
 
 const AiPassionFinderOutputSchema = z.object({
-  suggestedPassionAreas: z
-    .string()
-    .describe('The suggested passion areas based on the journal entries.'),
+  passionAreas: z
+    .array(
+      z.object({
+        title: z.string().describe('A concise name for the passion area, like "Creative Writing" or "Hiking".'),
+        description: z
+          .string()
+          .describe('A brief, one-sentence explanation of why this passion was suggested based on the journal entries.'),
+      })
+    )
+    .describe('A list of suggested passion areas, each with a title and a short description.'),
 });
 export type AiPassionFinderOutput = z.infer<typeof AiPassionFinderOutputSchema>;
 
@@ -35,11 +42,11 @@ const prompt = ai.definePrompt({
   output: {schema: AiPassionFinderOutputSchema},
   prompt: `You are an AI assistant designed to analyze a user's journal entries and suggest potential passion areas.
 
-Analyze the following journal entries and suggest potential passion areas based on recurring themes, interests, and reflections.
+Analyze the following journal entries and suggest a list of 5-7 potential passion areas based on recurring themes, interests, and reflections. For each passion, provide a short title and a one-sentence description explaining the suggestion.
 
 Journal Entries: {{{journalEntries}}}
 
-Based on the above journal entries, suggest some passion areas for the user to explore:
+Based on the above journal entries, suggest some passion areas for the user to explore.
 `,
 });
 
