@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import Image from 'next/image';
 import Link from 'next/link';
 import {generateInspiration} from '@/ai/flows/inspiration-generator';
 import type {InspirationOutput} from '@/ai/schemas/inspiration-schema';
@@ -20,12 +19,12 @@ function InspirationSkeleton() {
   return (
     <Card className="flex flex-col w-full">
       <CardHeader>
-        <Skeleton className="aspect-video relative rounded-t-lg -mt-6 -mx-6 mb-4" />
         <Skeleton className="h-6 w-3/4" />
       </CardHeader>
-      <CardContent className="flex-grow">
+      <CardContent className="flex-grow space-y-2">
         <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-5/6 mt-2" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
       </CardContent>
       <CardFooter>
         <Skeleton className="h-4 w-1/3" />
@@ -80,15 +79,6 @@ export default function InspirationPage() {
           >
             <Card className="flex flex-col hover:border-primary/50 transition-colors w-full">
               <CardHeader>
-                <div className="aspect-video relative rounded-t-lg overflow-hidden -mt-6 -mx-6 mb-4">
-                  <Image
-                    src={`https://placehold.co/600x400.png`}
-                    alt={item.title}
-                    fill
-                    className="object-cover"
-                    data-ai-hint={item.aiHint}
-                  />
-                </div>
                 <CardTitle>{item.title}</CardTitle>
               </CardHeader>
               <CardContent className="flex-grow">

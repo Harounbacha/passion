@@ -17,12 +17,13 @@ export const InspirationItemSchema = z.object({
     ),
   excerpt: z
     .string()
-    .describe('A short, one-sentence summary or excerpt of the content.'),
-  url: z.string().describe("A placeholder URL, which should always be '#'."),
-  aiHint: z
+    .describe(
+      'A short, engaging excerpt of the content, about 2-3 sentences long.'
+    ),
+  url: z
     .string()
     .describe(
-      'One or two keywords for a relevant background image (e.g., "creative workspace", "zen garden").'
+      "A URL that links to the journal page with the title as a prompt."
     ),
 });
 
