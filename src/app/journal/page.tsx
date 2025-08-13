@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -7,12 +8,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Textarea } from '@/components/ui/textarea'
 import useLocalStorage from '@/hooks/use-local-storage'
 import { useToast } from '@/hooks/use-toast'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function JournalPage() {
   const [entries, setEntries] = useLocalStorage<string[]>('journal-entries', [])
   const [newEntry, setNewEntry] = useState('')
   const { toast } = useToast()
   const searchParams = useSearchParams()
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   useEffect(() => {
     const prompt = searchParams.get('prompt')
@@ -61,7 +68,13 @@ export default function JournalPage() {
       
       <div className="space-y-4">
         <h2 className="text-2xl font-bold font-headline">Past Entries</h2>
-        {entries.length > 0 ? (
+        {!isClient ? (
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+             <Skeleton className="h-24" />
+             <Skeleton className="h-24" />
+             <Skeleton className="h-24" />
+           </div>
+        ) : entries.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {entries.map((entry, index) => (
               <Card key={index}>
