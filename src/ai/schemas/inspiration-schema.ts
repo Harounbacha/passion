@@ -18,7 +18,7 @@ export const InspirationItemSchema = z.object({
   excerpt: z
     .string()
     .describe('A short, one-sentence summary or excerpt of the content.'),
-  url: z.string().url().describe("A placeholder URL, which should always be '#'."),
+  url: z.string().describe("A placeholder URL, which should always be '#'."),
   aiHint: z
     .string()
     .describe(
