@@ -18,7 +18,7 @@ export default async function InspirationPage() {
             <Card className="flex flex-col hover:border-primary/50 transition-colors w-full">
               <CardHeader>
                 <div className="aspect-video relative rounded-t-lg overflow-hidden -mt-6 -mx-6 mb-4">
-                  <Image src="https://placehold.co/600x400.png" alt={item.title} fill className="object-cover" data-ai-hint={item.aiHint}/>
+                  <Image src={`https://placehold.co/600x400.png`} alt={item.title} fill className="object-cover" data-ai-hint={item.aiHint}/>
                 </div>
                 <CardTitle>{item.title}</CardTitle>
               </CardHeader>
