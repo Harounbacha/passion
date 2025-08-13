@@ -1,18 +1,25 @@
+
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import useLocalStorage from '@/hooks/use-local-storage'
 import { Loader2, Sparkles } from 'lucide-react'
 import { aiPassionFinder } from '@/ai/flows/ai-passion-finder'
 import { useToast } from '@/hooks/use-toast'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function DiscoverPage() {
   const [journalEntries] = useLocalStorage<string[]>('journal-entries', [])
   const [isLoading, setIsLoading] = useState(false)
   const [passionAreas, setPassionAreas] = useState('')
   const { toast } = useToast()
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const handleAnalyze = async () => {
     if (journalEntries.length === 0) {
@@ -54,7 +61,7 @@ export default function DiscoverPage() {
 
       <Card className="w-full max-w-2xl">
         <CardContent className="p-6">
-          <Button onClick={handleAnalyze} disabled={isLoading} size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+          <Button onClick={handleAnalyze} disabled={isLoading || !isClient} size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -64,9 +71,13 @@ export default function DiscoverPage() {
               'Analyze My Journal'
             )}
           </Button>
-          <p className="text-xs text-muted-foreground mt-2">
-            You have {journalEntries.length} {journalEntries.length === 1 ? 'entry' : 'entries'} to analyze.
-          </p>
+          {isClient ? (
+            <p className="text-xs text-muted-foreground mt-2">
+              You have {journalEntries.length} {journalEntries.length === 1 ? 'entry' : 'entries'} to analyze.
+            </p>
+          ) : (
+            <Skeleton className="h-4 w-1/2 mx-auto mt-2" />
+          )}
         </CardContent>
       </Card>
 
