@@ -9,9 +9,15 @@ import { Textarea } from '@/components/ui/textarea'
 import useLocalStorage from '@/hooks/use-local-storage'
 import { useToast } from '@/hooks/use-toast'
 import { Skeleton } from '@/components/ui/skeleton'
+import { X } from 'lucide-react'
+
+type JournalEntry = {
+  id: string
+  content: string
+}
 
 export default function JournalPage() {
-  const [entries, setEntries] = useLocalStorage<string[]>('journal-entries', [])
+  const [entries, setEntries] = useLocalStorage<JournalEntry[]>('journal-entries-v2', [])
   const [newEntry, setNewEntry] = useState('')
   const { toast } = useToast()
   const searchParams = useSearchParams()
@@ -37,13 +43,25 @@ export default function JournalPage() {
       })
       return
     }
-    setEntries([newEntry, ...entries])
+    const entry: JournalEntry = {
+      id: new Date().toISOString(),
+      content: newEntry,
+    }
+    setEntries([entry, ...entries])
     setNewEntry('')
     toast({
       title: 'Entry Saved!',
       description: 'Your thoughts have been recorded.',
     })
   }
+
+  const handleDeleteEntry = (id: string) => {
+    setEntries(entries.filter((entry) => entry.id !== id))
+    toast({
+      title: 'Entry Deleted',
+    })
+  }
+
 
   return (
     <div className="flex flex-col gap-8">
@@ -76,10 +94,18 @@ export default function JournalPage() {
            </div>
         ) : entries.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {entries.map((entry, index) => (
-              <Card key={index}>
+            {entries.map((entry) => (
+              <Card key={entry.id} className="relative group">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-2 right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => handleDeleteEntry(entry.id)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
                 <CardContent className="p-6">
-                  <p className="whitespace-pre-wrap">{entry}</p>
+                  <p className="whitespace-pre-wrap">{entry.content}</p>
                 </CardContent>
               </Card>
             ))}

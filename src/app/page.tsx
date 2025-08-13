@@ -1,3 +1,4 @@
+
 'use client'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -7,8 +8,13 @@ import { BookText, BrainCircuit } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 
+type JournalEntry = {
+  id: string
+  content: string
+}
+
 export default function Dashboard() {
-  const [journalEntries] = useLocalStorage<string[]>('journal-entries', [])
+  const [journalEntries] = useLocalStorage<JournalEntry[]>('journal-entries-v2', [])
   const [ideas] = useLocalStorage<{ id: string; title: string; content: string }[]>('brainstorm-ideas', [])
   const [isClient, setIsClient] = useState(false)
 

@@ -10,8 +10,13 @@ import { aiPassionFinder } from '@/ai/flows/ai-passion-finder'
 import { useToast } from '@/hooks/use-toast'
 import { Skeleton } from '@/components/ui/skeleton'
 
+type JournalEntry = {
+  id: string
+  content: string
+}
+
 export default function DiscoverPage() {
-  const [journalEntries] = useLocalStorage<string[]>('journal-entries', [])
+  const [journalEntries] = useLocalStorage<JournalEntry[]>('journal-entries-v2', [])
   const [isLoading, setIsLoading] = useState(false)
   const [passionAreas, setPassionAreas] = useState('')
   const { toast } = useToast()
@@ -34,7 +39,7 @@ export default function DiscoverPage() {
     setIsLoading(true)
     setPassionAreas('')
     try {
-      const allEntries = journalEntries.join('\n\n---\n\n')
+      const allEntries = journalEntries.map(entry => entry.content).join('\n\n---\n\n')
       const result = await aiPassionFinder({ journalEntries: allEntries })
       setPassionAreas(result.suggestedPassionAreas)
     } catch (error) {
