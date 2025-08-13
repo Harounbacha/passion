@@ -3,57 +3,44 @@
 
 import { useState, useEffect, useCallback } from 'react'
 
+// Hook
 export default function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((val: T) => T)) => void] {
-  const readValue = useCallback((): T => {
+  // State to store our value
+  // Pass initial state function to useState so logic is only executed once
+  const [storedValue, setStoredValue] = useState<T>(() => {
     if (typeof window === 'undefined') {
       return initialValue
     }
-
     try {
+      // Get from local storage by key
       const item = window.localStorage.getItem(key)
-      return item ? (JSON.parse(item) as T) : initialValue
+      // Parse stored json or if none return initialValue
+      return item ? JSON.parse(item) : initialValue
     } catch (error) {
-      console.warn(`Error reading localStorage key “${key}”:`, error)
+      // If error also return initialValue
+      console.log(error)
       return initialValue
     }
-  }, [initialValue, key])
+  })
 
-  const [storedValue, setStoredValue] = useState<T>(readValue)
-
-  const setValue = useCallback((value: T | ((val: T) => T)) => {
-    if (typeof window === 'undefined') {
-      console.warn(`Tried to set localStorage key “${key}” even though no window was found`)
-      return
-    }
-
+  // Return a wrapped version of useState's setter function that ...
+  // ... persists the new value to localStorage.
+  const setValue = (value: T | ((val: T) => T)) => {
     try {
-      const newValue = value instanceof Function ? value(storedValue) : value
-      window.localStorage.setItem(key, JSON.stringify(newValue))
-      setStoredValue(newValue)
-      window.dispatchEvent(new Event('local-storage'))
+      // Allow value to be a function so we have same API as useState
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value
+      // Save state
+      setStoredValue(valueToStore)
+      // Save to local storage
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(key, JSON.stringify(valueToStore))
+      }
     } catch (error) {
-      console.warn(`Error setting localStorage key “${key}”:`, error)
+      // A more advanced implementation would handle the error case
+      console.log(error)
     }
-  }, [initialValue, key, storedValue]);
-
-  useEffect(() => {
-    setStoredValue(readValue())
-  }, [readValue])
-  
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setStoredValue(readValue())
-    }
-
-    window.addEventListener('storage', handleStorageChange)
-    window.addEventListener('local-storage', handleStorageChange)
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange)
-      window.removeEventListener('local-storage', handleStorageChange)
-    }
-  }, [readValue])
-
+  }
 
   return [storedValue, setValue]
 }
