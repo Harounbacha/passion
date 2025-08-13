@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
@@ -19,7 +20,7 @@ export default function useLocalStorage<T>(key: string, initialValue: T): [T, (v
 
   const [storedValue, setStoredValue] = useState<T>(readValue)
 
-  const setValue = (value: T | ((val: T) => T)) => {
+  const setValue = useCallback((value: T | ((val: T) => T)) => {
     try {
       const valueToStore = value instanceof Function ? value(storedValue) : value
       setStoredValue(valueToStore)
@@ -29,8 +30,8 @@ export default function useLocalStorage<T>(key: string, initialValue: T): [T, (v
     } catch (error) {
       console.warn(`Error setting localStorage key “${key}”:`, error)
     }
-  }
-  
+  }, [key, storedValue]);
+
   useEffect(() => {
     setStoredValue(readValue())
   }, [readValue])
