@@ -10,7 +10,7 @@ The platform leverages **Google’s Gemini AI API** to provide personalized insi
 - 📓 **Smart Journaling** – Reflect on your journey and receive meaningful feedback.
 - 📊 **Progress Tracking** – Visualize growth and stay motivated.
 - 🎨 **Modern UI/UX** – Clean, responsive design built with TailwindCSS.
-- ⚡ **Cutting-Edge Stack** – Next.js 15, TypeScript, and Gemini AI.
+- ⚡ **Cutting-Edge Stack** – Next.js 15, JavaScript, and Gemini AI.
 
 ---
 
